@@ -1,6 +1,13 @@
 from collections import deque
+from datetime import datetime
+
 
 class PowerStream:
     def __init__(self, plug, maxlen=60):
         self.plug = plug
         self.buffer = deque(maxlen=maxlen)
+
+    def add_reading(self, reading):
+        reading["timestamp"] = datetime.now()
+        self.buffer.append(reading)
+    
