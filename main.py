@@ -2,11 +2,11 @@ import logging
 import os
 import colorlog
 from dotenv import load_dotenv
-from pond_monitor.collectors.shelly import ShellyPlug
-from pond_monitor.processing.stream import PowerStream
-from pond_monitor.storage.duckdb import DuckDbStorage
-from pond_monitor.alerts.console import ConsoleAlerter
-from pond_monitor.pipeline import Pipeline
+from shelly_plug.collectors.shelly import ShellyPlug
+from shelly_plug.processing.stream import PowerStream
+from shelly_plug.storage.duckdb import DuckDbStorage
+from shelly_plug.alerts.console import ConsoleAlerter
+from shelly_plug.pipeline import Pipeline
 
 
 def main():
