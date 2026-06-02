@@ -1,6 +1,7 @@
 import logging
 import os
 import colorlog
+from dotenv import load_dotenv
 from pond_monitor.collectors.shelly import ShellyPlug
 from pond_monitor.processing.stream import PowerStream
 from pond_monitor.storage.duckdb import DuckDbStorage
@@ -9,6 +10,7 @@ from pond_monitor.pipeline import Pipeline
 
 
 def main():
+    load_dotenv()
     os.makedirs("logs", exist_ok=True)
 
     console_handler = colorlog.StreamHandler()
@@ -34,8 +36,11 @@ def main():
     )
 
     print("Hello from the ShellyPlug data extractor! Logging is included")
-    # bedroom fan
-    plug = ShellyPlug(ip_address="192.168.129.20", name="bedroom_fan", device_id="0")
+    plug = ShellyPlug(
+        ip_address=os.environ["SHELLY_IP"],
+        name=os.environ["SHELLY_NAME"],
+        device_id=os.environ.get("SHELLY_DEVICE_ID", "0"),
+    )
     stream = PowerStream(plug, maxlen=60)  # 1 minute window
     alerter = ConsoleAlerter()
     with DuckDbStorage("logs/shelly_plugs.db") as storage:
