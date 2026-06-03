@@ -14,26 +14,25 @@ def main():
     os.makedirs("logs", exist_ok=True)
 
     console_handler = colorlog.StreamHandler()
-    console_handler.setFormatter(colorlog.ColoredFormatter(
-        "%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        log_colors={
-            "DEBUG": "cyan",
-            "INFO": "green",
-            "WARNING": "yellow",
-            "ERROR": "red",
-            "CRITICAL": "bold_red",
-        }
-    ))
+    console_handler.setFormatter(
+        colorlog.ColoredFormatter(
+            "%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            log_colors={
+                "DEBUG": "cyan",
+                "INFO": "green",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "bold_red",
+            },
+        )
+    )
 
     file_handler = logging.FileHandler("logs/pipeline.log")
-    file_handler.setFormatter(logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    ))
-
-    logging.basicConfig(
-        level=logging.INFO,
-        handlers=[console_handler, file_handler]
+    file_handler.setFormatter(
+        logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     )
+
+    logging.basicConfig(level=logging.INFO, handlers=[console_handler, file_handler])
 
     print("Hello from the ShellyPlug data extractor! Logging is included")
     plug = ShellyPlug(
@@ -46,6 +45,7 @@ def main():
     with DuckDbStorage("logs/shelly_plugs.db") as storage:
         pipeline = Pipeline(plug, stream, storage, alerter)
         pipeline.run()
+
 
 if __name__ == "__main__":
     main()
