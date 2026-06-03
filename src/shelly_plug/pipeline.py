@@ -6,8 +6,16 @@ import time
 
 logger = logging.getLogger(__name__)
 
+
 class Pipeline:
-    def __init__(self, plug: ShellyPlug, stream: PowerStream, storage: DuckDbStorage , alerter, power_threshold=1.5):
+    def __init__(
+        self,
+        plug: ShellyPlug,
+        stream: PowerStream,
+        storage: DuckDbStorage,
+        alerter,
+        power_threshold=1.5,
+    ):
         self.plug = plug
         self.stream = stream
         self.storage = storage
@@ -20,18 +28,20 @@ class Pipeline:
         if status is None:
             self.alerter.send(f"Failed to get status from {self.plug.name}")
             return
-        
+
         reading = {
             "apower": status.get("apower", 0),
             "voltage": status.get("voltage", 0),
-            "current": status.get("current", 0)
+            "current": status.get("current", 0),
         }
 
         logger.info("Collected data from %s: %s", self.plug.name, reading)
         self.stream.add_reading(reading)
         avg = self.stream.mean("apower")
         if avg is not None and reading["apower"] > self.power_threshold * avg:
-            self.alerter.send(f"High power alert for {self.plug.name}: {reading['apower']}W")
+            self.alerter.send(
+                f"High power alert for {self.plug.name}: {reading['apower']}W"
+            )
 
         logger.info("Processed data for %s: %s", self.plug.name, reading)
 

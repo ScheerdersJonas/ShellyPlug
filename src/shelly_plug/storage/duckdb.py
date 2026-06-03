@@ -4,6 +4,7 @@ import duckdb
 
 logger = logging.getLogger(__name__)
 
+
 class DuckDbStorage(Storage):
     def __init__(self, db_path: str, read_only: bool = False):
         self.db_path = db_path
@@ -37,3 +38,4 @@ class DuckDbStorage(Storage):
             "INSERT INTO readings VALUES (?, ?, ?, ?, ?)",
             [data["timestamp"], data["plug_name"], data["apower"], data["voltage"], data["current"]]
         )
+

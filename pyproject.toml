@@ -12,7 +12,9 @@ dependencies = [
     "numpy>=2.4.6",
     "pandas>=3.0.3",
     "python-dotenv>=1.2.2",
+    "ruff>=0.15.15",
     "pyyaml>=6.0",
+
 ]
 
 [build-system]
